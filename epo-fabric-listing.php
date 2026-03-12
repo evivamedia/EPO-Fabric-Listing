@@ -194,37 +194,6 @@ function epo_fabric_listing_shortcode( $atts ) {
             echo '</div>'; // .epo-fl__main-swatch
         }
 
-        $main_image = array_shift( $images );
-
-        // --- Galería: imagen principal + variaciones ---
-        echo '<div class="epo-fl__gallery">';
-
-        if ( ! empty( $main_image['url'] ) ) {
-            echo '<div class="epo-fl__main-swatch">';
-
-            $main_link = $link ? epo_fl_get_swatch_link( $product, $main_image, $permalink ) : '';
-
-            if ( $link ) {
-                echo '<a href="' . esc_url( $main_link ) . '" class="epo-fl__swatch-link">';
-            }
-
-            echo '<div class="epo-fl__swatch-img-wrap epo-fl__swatch-img-wrap--main">';
-            echo '<img src="' . esc_url( $main_image['url'] ) . '" ';
-            echo 'alt="' . esc_attr( $main_image['label'] ? $main_image['label'] : $title ) . '" ';
-            echo 'loading="lazy" decoding="async" class="epo-fl__swatch-img" />';
-            echo '</div>';
-
-            if ( ! empty( $main_image['label'] ) ) {
-                echo '<span class="epo-fl__swatch-label">' . esc_html( $main_image['label'] ) . '</span>';
-            }
-
-            if ( $link ) {
-                echo '</a>';
-            }
-
-            echo '</div>'; // .epo-fl__main-swatch
-        }
-
         echo '<div class="epo-fl__swatches">';
 
         foreach ( $images as $img ) {
@@ -718,38 +687,21 @@ function epo_fabric_listing_enqueue( $atts ) {
     /* --- Grid de swatches --- */
     .epo-fl__gallery {
         display: grid;
-        grid-template-columns: repeat(5, minmax(0, 1fr));
+        grid-template-columns: 4fr 8fr;
         gap: 12px;
         align-items: start;
     }
 
     .epo-fl__main-swatch {
-        grid-column: span 1;
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-    }
-
-    /* --- Grid de swatches --- */
-    .epo-fl__gallery {
-        display: grid;
-        grid-template-columns: repeat(5, minmax(0, 1fr));
-        gap: 12px;
-        align-items: start;
-    }
-
-    .epo-fl__main-swatch {
-        grid-column: span 1;
         display: flex;
         flex-direction: column;
         gap: 6px;
     }
 
     .epo-fl__swatches {
-        grid-column: span 4;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 16px 14px;
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 12px;
     }
 
     .epo-fl__swatch {
@@ -778,6 +730,7 @@ function epo_fabric_listing_enqueue( $atts ) {
 
     .epo-fl__swatch-img-wrap--main {
         width: 100%;
+        aspect-ratio: 1 / 1;
     }
 
     .epo-fl__swatch-img-wrap::after {
@@ -832,12 +785,11 @@ function epo_fabric_listing_enqueue( $atts ) {
         }
 
         .epo-fl__gallery {
-            grid-template-columns: repeat(2, minmax(0, 1fr));
+            grid-template-columns: 1fr;
         }
 
-        .epo-fl__main-swatch,
         .epo-fl__swatches {
-            grid-column: span 2;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
         }
     }
 
@@ -848,11 +800,8 @@ function epo_fabric_listing_enqueue( $atts ) {
         }
 
         .epo-fl__swatches {
-            gap: 12px 10px;
-        }
-
-        .epo-fl__swatch {
-            width: calc((100% - 10px) / 2);
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
         }
     }
     ';
