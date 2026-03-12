@@ -154,14 +154,18 @@ function epo_fabric_listing_shortcode( $atts ) {
         if ( $show_img && has_post_thumbnail( $product_id ) ) {
             $featured_url = get_the_post_thumbnail_url( $product_id, 'medium' );
             if ( ! empty( $featured_url ) ) {
-                $main_image = array(
-                    'url'   => esc_url( $featured_url ),
-                    'label' => '',
-                );
-
-                $images = array_values( array_filter( $images, function( $img ) use ( $featured_url ) {
-                    return empty( $img['url'] ) || $img['url'] !== $featured_url;
-                } ) );
+                // Prepend the featured image into the swatches but keep the
+                // first variation as the main image so its label is preserved.
+                $has_featured_in_swatches = false;
+                foreach ( $images as $img ) {
+                    if ( isset( $img['url'] ) && $img['url'] === esc_url( $featured_url ) ) {
+                        $has_featured_in_swatches = true;
+                        break;
+                    }
+                }
+                if ( ! $has_featured_in_swatches && ( empty( $main_image['url'] ) || $main_image['url'] !== esc_url( $featured_url ) ) ) {
+                    array_unshift( $images, array( 'url' => esc_url( $featured_url ), 'label' => '' ) );
+                }
             }
         }
 
